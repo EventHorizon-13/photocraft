@@ -27,4 +27,32 @@ menus, English/Chinese switching, preference persistence, opening PNG and saving
 The Pc exports were visually reviewed at 1024, 64, 32 and 16 px.
 This source-port commit has not been rebuilt or run through Rust checks.
 No build, deployment or production service restart is part of this commit.
-The separate deployed touch-menu workaround is not part of this Rust patch.
+## Touch menus
+
+The Web shell installs a Rust capture listener before eframe starts. It mirrors
+the previously deployed, user-verified menu touch workaround: a gesture beginning
+within the canvas's top 32 CSS pixels uses only eframe's PointerEvent path.
+Duplicate TouchEvents for that gesture are consumed until its final touch ends.
+Browsers without PointerEvent keep their touch fallback. Mouse events, the pen
+feed and touch gestures starting in the editor remain unchanged.
+
+The Rust port must still be checked in a real browser; the earlier JavaScript
+workaround's iPad validation does not constitute validation of this new binary.
+
+## Web-only GitHub Actions
+
+`.github/workflows/web.yml` builds on pushes to main, pull requests and manual
+dispatch. All imported upstream workflows are manual-only in this fork.
+Only the browser app and its small WebAssembly boot loader are compiled.
+The workflow downloads pinned, SHA-256-verified SC/TC/JP/KR fonts and their OFL
+licenses with `packaging/web/prepare-fonts.py`, then passes that external folder
+to the existing Web packager. Font files are not stored in Git.
+
+Download `photocraft-web-<commit>` from the workflow's Artifacts section.
+It contains the ready-to-host static-site zip and SHA256SUMS.txt, retained for
+30 days. Successful compilation alone is not browser or iPad acceptance.
+
+Both Web entry points explicitly disable wasm-opt; the earlier Binaryen 108
+optimized output failed at runtime in Chromium. Thin LTO and two Cargo jobs
+reduce CI memory pressure. No desktop packaging or server deployment runs.
+

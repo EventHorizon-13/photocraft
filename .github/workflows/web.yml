@@ -1,0 +1,77 @@
+name: Web build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_JOBS: "2"
+  CARGO_PROFILE_WASM_RELEASE_LTO: thin
+  TRUNK_VERSION: 0.21.14
+
+jobs:
+  web:
+    name: Build Web package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.95.0
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: fork-web-thin
+          cache-on-failure: true
+      - name: Install Trunk
+        run: |
+          curl --fail --location --retry 3 \
+            "https://github.com/trunk-rs/trunk/releases/download/v${TRUNK_VERSION}/trunk-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz -C "$HOME/.cargo/bin" trunk
+          trunk --version
+      - name: Prepare verified CJK fonts
+        run: |
+          python3 packaging/web/prepare-fonts.py "$RUNNER_TEMP/photocraft-fonts"
+          echo "PHOTOCRAFT_WEB_FONTS_DIR=$RUNNER_TEMP/photocraft-fonts" >> "$GITHUB_ENV"
+      - name: Build Web and package static site
+        run: packaging/web/package.sh
+      - name: Create package checksums
+        run: |
+          cd dist/release
+          sha256sum photocraft-web-*.zip > SHA256SUMS.txt
+      - name: Upload Web package
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: photocraft-web-${{ github.sha }}
+          path: |
+            dist/release/photocraft-web-*.zip
+            dist/release/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+      - name: Package summary
+        env:
+          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
+        run: |
+          {
+            echo "## PhotoCraft Web"
+            echo
+            echo "Commit: $GITHUB_SHA"
+            echo
+            echo "[Download Web package]($ARTIFACT_URL)"
+            echo
+            echo "Includes Chinese UI fallbacks, Pc glass icons, touch-menu compatibility and verified CJK fonts."
+            echo "This workflow builds only the browser app and its WebAssembly boot loader."
+          } >> "$GITHUB_STEP_SUMMARY"

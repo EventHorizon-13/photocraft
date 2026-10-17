@@ -52,6 +52,10 @@ pub fn start() {
             log::error!("missing <canvas id=\"{CANVAS_ID}\">");
             return;
         };
+        // Install the capture listener before eframe adds its bubbling touch listeners.
+        if let Err(error) = crate::touch_menu::install(&document, &canvas) {
+            log::warn!("Could not install touch menu compatibility: {error:?}");
+        }
         let q = query();
         let force_cpu = q.contains("cpu");
         let mut options = eframe::WebOptions::default();

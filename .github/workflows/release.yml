@@ -1,8 +1,7 @@
 name: Release
 
+# This fork automatically builds only Web; other upstream jobs are opt-in.
 on:
-  push:
-    branches: [release]
   workflow_dispatch:
     inputs:
       version:
