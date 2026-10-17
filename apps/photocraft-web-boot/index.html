@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <title>PhotoCraft</title>
+  <link data-trunk rel="copy-dir" href="../../assets/app-icon/pc-glass/web" data-target-path="icons" />
+  <link rel="manifest" href="./icons/manifest.json">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+  <meta name="theme-color" content="#262626">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PhotoCraft">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link data-trunk rel="rust" data-bin="photocraft-web-boot" data-cargo-profile="wasm-release" data-wasm-opt="z" data-wasm-opt-params="--converge" data-weak-refs />
   <style>
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #262626; }

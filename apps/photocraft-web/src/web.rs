@@ -97,7 +97,7 @@ pub fn start() {
                     }
                     let unsaved = Arc::new(AtomicBool::new(false));
                     guard_unload(unsaved.clone());
-                    Ok(Box::new(WebShell { app, inbox, unsaved, served, database, presets }))
+                    Ok(Box::new(WebShell { app, inbox, unsaved, served, database, presets, ui_fonts: HashMap::new() }))
                 }),
             )
             .await;
@@ -186,7 +186,7 @@ fn load_font_manifest(served: Served, ctx: egui::Context) {
         served_fonts::add_fonts(&fonts);
         // Fetch now the fallbacks of the scripts the browser's languages use (an Arabic reader gets
         // the Arabic font before typing); the rest is fetched when text or a font menu needs it.
-        served_fonts::request_for_languages(browser_languages().iter().map(String::as_str));
+        served_fonts::request_for_languages(browser_languages().iter().map(String::as_str).chain(["zh-CN"]));
         ctx.request_repaint();
     });
 }
@@ -226,6 +226,8 @@ struct WebShell {
     /// Read by the `beforeunload` listener ([`guard_unload`]).
     unsaved: Arc<AtomicBool>,
     served: Served,
+    // Retain UI fallbacks when changing language or theme rebuilds egui font definitions.
+    ui_fonts: HashMap<String, Arc<egui::FontData>>,
     database: Option<web_sys::IdbDatabase>,
     presets: crate::preset_bridge::Bridge,
 }
@@ -278,7 +280,20 @@ impl WebShell {
                 }
             });
         }
+        // Document text and application chrome have separate font databases.
+        for (family, bytes) in &arrived {
+            let name = format!("served-ui {family}");
+            self.ui_fonts.entry(name).or_insert_with(|| Arc::new(egui::FontData::from_owned(bytes.clone())));
+        }
         served_fonts::install(&mut self.app, arrived);
+        for (name, data) in &self.ui_fonts {
+            let present = ctx.fonts(|f| f.definitions().font_data.contains_key(name));
+            if !present {
+                photocraft_ui_egui::cjk_fonts::add_to_all_families(ctx, name.clone(), data.as_ref().clone());
+                log::info!("photocraft-web: UI fallback registered {name}");
+                ctx.request_repaint();
+            }
+        }
     }
 }
 

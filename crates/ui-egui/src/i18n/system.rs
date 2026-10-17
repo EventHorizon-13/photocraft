@@ -54,7 +54,8 @@ fn detect_system_tags() -> Vec<String> {
 
 #[cfg(all(not(test), target_arch = "wasm32"))]
 fn detect_system_tags() -> Vec<String> {
-    Vec::new()
+    // This fork defaults Web Auto to Simplified Chinese; explicit preferences still win.
+    vec!["zh-CN".to_owned()]
 }
 
 #[cfg(test)]

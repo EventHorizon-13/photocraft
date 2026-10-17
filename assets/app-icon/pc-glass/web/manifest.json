@@ -1,0 +1,19 @@
+{
+  "id": "../",
+  "name": "PhotoCraft",
+  "short_name": "PhotoCraft",
+  "lang": "zh-CN",
+  "start_url": "../",
+  "scope": "../",
+  "display": "standalone",
+  "background_color": "#262626",
+  "theme_color": "#262626",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1024" height="1024" viewBox="0 0 1024 1024">
+<title>PhotoCraft Pc — restrained blue glass</title>
+<desc>Original Pc letterforms in tinted blue glass, fine directional rim lighting, a shallow refractive edge and a soft contact shadow over midnight navy. Static SVG rendition for a Web App icon.</desc>
+<defs>
+ <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#092c47" /><stop offset=".52" stop-color="#021e35" /><stop offset="1" stop-color="#001427" /></linearGradient>
+ <radialGradient id="ambient" cx=".24" cy=".16" r=".88"><stop stop-color="#2c6081" stop-opacity=".2" /><stop offset="1" stop-color="#00162b" stop-opacity="0" /></radialGradient>
+ <linearGradient id="glass" x1="0" y1="0" x2=".58" y2="1"><stop stop-color="#69cbff" stop-opacity=".94" /><stop offset=".32" stop-color="#34acf1" stop-opacity=".91" /><stop offset=".58" stop-color="#2596df" stop-opacity=".86" /><stop offset=".82" stop-color="#2394df" stop-opacity=".94" /><stop offset="1" stop-color="#4db7f6" stop-opacity=".96" /></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#d6f4ff" stop-opacity=".66" /><stop offset=".28" stop-color="#94ddff" stop-opacity=".32" /><stop offset=".52" stop-color="#4ba8dc" stop-opacity=".08" /><stop offset=".78" stop-color="#2f7ba8" stop-opacity=".24" /><stop offset="1" stop-color="#94ddff" stop-opacity=".54" /></linearGradient>
+ <linearGradient id="refract" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#d8f5ff" stop-opacity=".58" /><stop offset=".4" stop-color="#8bdcff" stop-opacity=".14" /><stop offset=".7" stop-color="#0066a9" stop-opacity=".34" /><stop offset="1" stop-color="#82d8ff" stop-opacity=".37" /></linearGradient>
+ <radialGradient id="softGloss" cx=".22" cy=".13" r=".82"><stop stop-color="#e8faff" stop-opacity=".2" /><stop offset=".33" stop-color="#a4e9ff" stop-opacity=".08" /><stop offset=".68" stop-color="#78cfff" stop-opacity="0" /><stop offset="1" stop-color="#78cfff" stop-opacity="0" /></radialGradient>
+ <linearGradient id="reflection" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e3f7ff" stop-opacity=".19" /><stop offset="1" stop-color="#a1e4ff" stop-opacity=".02" /></linearGradient>
+ <path id="p" fill-rule="evenodd" d="M228 280H403C500 280 557 339 557 430C557 523 496 581 398 581H322V744H228ZM322 362V499H394C441 499 465 473 465 431C465 389 442 362 394 362Z" />
+ <path id="c" d="M880 426L833 494C814 478 794 470 769 470C720 470 696 506 696 569C696 632 720 669 770 669C794 669 817 659 835 641L880 708C850 738 815 752 768 752C666 752 603 681 603 571C603 461 666 388 768 388C816 388 853 402 880 426Z" />
+ <clipPath id="letters"><use xlink:href="#p" /><use xlink:href="#c" /></clipPath>
+<clipPath id="titlebar-rounding"><rect width="1024" height="1024" rx="200" /></clipPath></defs>
+<g clip-path="url(#titlebar-rounding)"><rect width="1024" height="1024" fill="url(#navy)" />
+<rect width="1024" height="1024" fill="url(#ambient)" />
+<g transform="translate(24.48 21.8) scale(.88 .95)" stroke-linejoin="round">
+ <g transform="translate(0 10)" fill="#000c1c" stroke="#000c1c" stroke-width="11" opacity=".09"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+ <g transform="translate(0 6)" fill="#063653" stroke="#063653" stroke-width="2"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+ <g fill="url(#glass)"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+ <g clip-path="url(#letters)">
+  <g transform="translate(1.6 2.5)" fill="none" stroke="url(#refract)" stroke-width="5"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+  <rect x="190" y="250" width="720" height="530" fill="url(#softGloss)" />
+  <g transform="translate(-1 -1.5)" fill="none" stroke="#004777" stroke-opacity=".11" stroke-width="3"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+ </g>
+ <g fill="none" stroke="url(#edge)" stroke-width="1.7"><use xlink:href="#p" /><use xlink:href="#c" /></g>
+</g>
+</g></svg>
