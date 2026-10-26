@@ -1,4 +1,4 @@
-name: SolidCraft Web Chinese glyph fallback 20261026
+name: SolidCraft Web Chinese glyph fallback retry 20261026
 on:
   push:
     branches: [deploy/web-upgrade-20261026]
