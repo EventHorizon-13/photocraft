@@ -43,7 +43,7 @@ jobs:
           curl --fail --location --retry 3 https://github.com/trunk-rs/trunk/releases/download/v0.22.0/trunk-x86_64-unknown-linux-gnu.tar.gz -o /tmp/trunk.tar.gz
           echo 'f78c1989240c56592d8cfc4df5cc27399a3ff66a3f9cc819e16f1e3d809ce7c2  /tmp/trunk.tar.gz' | sha256sum -c -
           tar -xzf /tmp/trunk.tar.gz -C "$HOME/.cargo/bin" trunk
-      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcaf7c3dddab59af2b6
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6
         with:
           workspaces: upstream
           key: deployment-solidcraft-chinese-20261026
