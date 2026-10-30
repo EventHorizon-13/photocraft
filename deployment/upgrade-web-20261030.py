@@ -1,5 +1,5 @@
 """Reapply this deployment's font, icon and menu fixes to a fixed official release."""
-import pathlib,sys,urllib.request,shutil,re,json,subprocess
+import pathlib,sys,os,urllib.request,shutil,re,json,subprocess
 P=pathlib.Path
 app=sys.argv[1];root=P(sys.argv[2]).resolve();old=P(sys.argv[3]).resolve()
 font_dir=root.parent/'local-font-input';font_dir.mkdir(exist_ok=True)
@@ -65,7 +65,10 @@ if app in ['vectorcraft','photocraft','pdfcraft']:
  icon={'vectorcraft':'vc-glass','photocraft':'pc-glass','pdfcraft':'pdf-glass'}[app]
  src=old/'assets/app-icon'/icon;assert src.is_dir();shutil.copytree(src,root/'assets/app-icon'/icon,dirs_exist_ok=True)
  if app!='pdfcraft':
-  f=ui/'src/brand.rs';s=f.read_text();s,n=re.subn(r'include_bytes!\("[^"\n]+"\)',f'include_bytes!("../../../assets/app-icon/{icon}/titlebar-128.png")',s,count=1);assert n==1;f.write_text(s)
+  f=ui/'src/brand.rs'
+  if not f.exists():f=ui/'src/panels/brand.rs'
+  relative=os.path.relpath(root/'assets/app-icon'/icon/'titlebar-128.png',f.parent).replace(os.sep,'/')
+  s=f.read_text();s,n=re.subn(r'include_bytes!\("[^"\n]+"\)',f'include_bytes!("{relative}")',s,count=1);assert n==1;f.write_text(s)
  else:
   f=ui/'src/widgets.rs';s=f.read_text();previous=(old/'crates/ui-egui/src/widgets.rs').read_text()
   a=previous.index('pub fn artcraft_logo(');b=previous.index('pub fn community_links(',a)

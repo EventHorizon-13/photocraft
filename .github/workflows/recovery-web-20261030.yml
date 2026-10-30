@@ -1,13 +1,13 @@
 name: Craft latest Chinese Web recovery
 on:
   push:
-    branches: [deploy/recovery-latest-20261030]
+    branches: [deploy/recovery-photocraft-20261030]
     paths: [deployment/**, .github/workflows/recovery-web-20261030.yml]
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: craft-web-recovery-20261030
+  group: photocraft-web-recovery-20261030
   cancel-in-progress: true
 jobs:
   web:
@@ -19,46 +19,10 @@ jobs:
       max-parallel: 4
       matrix:
         include:
-          - app: vectorcraft
-            repo: storytold/vectorcraft
-            tag: v0.18.0
-            ref: 68b68a30acad9b3d8a72802b35f43b82e2bd7d3a
-            donor: EventHorizon-13/vectorcraft
-            donor_ref: fe4edb452be5ab7f9b0059aeed81a0a842111f4b
           - app: photocraft
             repo: storytold/photocraft
             tag: v0.17.0
             ref: b8c3f3aa8e2918032cadc0e042664414a03be333
-            donor: EventHorizon-13/photocraft
-            donor_ref: 59a1078fa4b0d1dc41dac142bc37b4c9ebf878b2
-          - app: pdfcraft
-            repo: storytold/pdfcraft
-            tag: v0.15.0
-            ref: 75360d1d7db06fed974f48c914d4c04132757187
-            donor: EventHorizon-13/pdfcraft
-            donor_ref: 5b1669fa1e29b3822f4c89946e0944a2cd8d985f
-          - app: gridcraft
-            repo: storytold/gridcraft
-            tag: v0.13.0
-            ref: 43284377d2466037628e57d8ad0c891778fdb45c
-            donor: EventHorizon-13/gridcraft
-            donor_ref: c309074c47d10178c1820af999139b63e35f1f08
-          - app: cadcraft
-            repo: storytold/cadcraft
-            tag: v0.14.0
-            ref: fbd97d432cdf36a566c0c53739481bd6f0c32b0d
-            donor: EventHorizon-13/photocraft
-            donor_ref: 59a1078fa4b0d1dc41dac142bc37b4c9ebf878b2
-          - app: filmcraft
-            repo: storytold/filmcraft
-            tag: v0.14.0
-            ref: a2d8e9ce269aba9c399e36262522e11456df6fbf
-            donor: EventHorizon-13/photocraft
-            donor_ref: 59a1078fa4b0d1dc41dac142bc37b4c9ebf878b2
-          - app: solidcraft
-            repo: tangency-labs/solidcraft
-            tag: v0.27.1
-            ref: aa1fe28ddff42cac2990a312765a1a6c50d97dfe
             donor: EventHorizon-13/photocraft
             donor_ref: 59a1078fa4b0d1dc41dac142bc37b4c9ebf878b2
     env:
