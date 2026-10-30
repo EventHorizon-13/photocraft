@@ -83,4 +83,4 @@ if app=='gridcraft':
  f=root/'apps/gridcraft-web/src/web.rs';s=f.read_text();a=s.index('                    // Follow the browser');b=s.index('                    // Preferences from an earlier visit',a)
  s=s[:a]+'                    app.ui.language = gridcraft_ui_egui::i18n::Language::system();\n'+s[b:];f.write_text(s)
 out=root/'deployment-font-source.json';out.write_text(json.dumps([{'file':n,'url':font_url+n} for n in font_files],indent=2))
-print(json.dumps({'app':app,'wrapped_font_resets':count,'font':checks['DroidSansFallbackFull.ttf']}))
+print(json.dumps({'app':app,'wrapped_font_resets':count,'font_file':'DroidSansFallbackFull.ttf'}))
