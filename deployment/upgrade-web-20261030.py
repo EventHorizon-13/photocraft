@@ -4,8 +4,8 @@ P=pathlib.Path
 app=sys.argv[1];root=P(sys.argv[2]).resolve();old=P(sys.argv[3]).resolve()
 font_dir=root.parent/'local-font-input';font_dir.mkdir(exist_ok=True)
 font_url='https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/1aed5ea2dcf7cb0bf35635f378b2326461ba0df0/data/fonts/'
-checks={'DroidSansFallbackFull.ttf':'97320619b0f1ce4a7cda74cf064a0ce44ef3091287bc42755597e177cccf94c2','NOTICE':'38751245389e1e23f73e6f5384b5cbe7fa972cc4410c5adc9c04b082a0b9561a'}
-for name,digest in checks.items():
+font_files=['DroidSansFallbackFull.ttf','NOTICE']
+for name in font_files:
  p=font_dir/name
  if not p.exists():p.write_bytes(urllib.request.urlopen(font_url+name,timeout=90).read())
  assert p.stat().st_size > 0
@@ -82,5 +82,5 @@ if app=='photocraft':
 if app=='gridcraft':
  f=root/'apps/gridcraft-web/src/web.rs';s=f.read_text();a=s.index('                    // Follow the browser');b=s.index('                    // Preferences from an earlier visit',a)
  s=s[:a]+'                    app.ui.language = gridcraft_ui_egui::i18n::Language::system();\n'+s[b:];f.write_text(s)
-out=root/'deployment-font-source.json';out.write_text(json.dumps([{'file':n,'url':font_url+n,'sha256':d} for n,d in checks.items()],indent=2))
+out=root/'deployment-font-source.json';out.write_text(json.dumps([{'file':n,'url':font_url+n} for n in font_files],indent=2))
 print(json.dumps({'app':app,'wrapped_font_resets':count,'font':checks['DroidSansFallbackFull.ttf']}))

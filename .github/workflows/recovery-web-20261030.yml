@@ -1,8 +1,5 @@
 name: Craft latest Chinese Web recovery
 on:
-  push:
-    branches: [deploy/recovery-latest-20261030]
-    paths: [deployment/**, .github/workflows/recovery-web-20261030.yml]
   workflow_dispatch:
 permissions:
   contents: read
