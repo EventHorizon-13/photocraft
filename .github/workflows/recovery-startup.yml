@@ -1,7 +1,7 @@
 name: Craft targeted Web startup
 on:
   push:
-    branches: [deploy/recovery-web-check-20261030]
+    branches: [deploy/recovery-photo-check-20261030]
     paths: [.github/workflows/recovery-startup.yml, deployment/startup.cjs]
   workflow_dispatch:
 permissions:
@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        app: [gridcraft, cadcraft, pdfcraft, vectorcraft, photocraft, solidcraft, filmcraft]
+        app: [photocraft]
     env:
       GH_TOKEN: ${{ github.token }}
       APP: ${{ matrix.app }}
@@ -40,6 +40,14 @@ jobs:
           test -n "$inner"
           mkdir site
           unzip -q "$inner" -d site
+      - name: Supply the approved Chinese text font catalog
+        run: |
+          mkdir -p site/fonts
+          curl --fail --location --retry 3 --retry-all-errors --connect-timeout 10 --max-time 60 https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/1aed5ea2dcf7cb0bf35635f378b2326461ba0df0/data/fonts/DroidSansFallbackFull.ttf -o site/fonts/DroidSansFallbackFull.ttf
+          cp site/NOTICE-DroidSansFallback.txt site/fonts/NOTICE-DroidSansFallback.txt
+          family=$(fc-scan --format '%{family}' site/fonts/DroidSansFallbackFull.ttf)
+          style=$(fc-scan --format '%{style}' site/fonts/DroidSansFallbackFull.ttf)
+          printf '%s | %s | fonts/DroidSansFallbackFull.ttf | Hans,Hant,Latn | Apache-2.0 | fonts/NOTICE-DroidSansFallback.txt\n' "$family" "$style" > site/fonts/manifest.txt
       - name: Prepare browser
         run: |
           npm install --no-audit --no-fund playwright-core@1.56.1
