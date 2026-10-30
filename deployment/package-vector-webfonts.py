@@ -14,6 +14,7 @@ for line in (fonts/'fonts/manifest.txt').read_text().splitlines():
     family,style,path,scripts,license_id,license_path,known_name,source=[x.strip() for x in line.split('|',7)]
     manifest[(family,style)]=(path,license_path,known_name)
 for when,family,style in requests:
+    if (family,style) not in manifest: continue
     path,license_path,known_name=manifest[(family,style)]
     source=fonts/path
     if not source.is_file(): raise SystemExit('pinned Craft font file missing: '+path)
@@ -22,4 +23,4 @@ for when,family,style in requests:
     shutil.copy2(source,target)
     license_source=fonts/license_path
     if license_source.is_file(): shutil.copy2(license_source,target.with_name(target.name+'.OFL.txt'))
-print('Packaged',len(requests),'runtime Craft web fonts')
+print('Packaged',sum(1 for _,family,style in requests if (family,style) in manifest),'available runtime Craft web fonts')
