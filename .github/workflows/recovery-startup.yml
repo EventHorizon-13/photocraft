@@ -1,0 +1,58 @@
+name: Craft targeted Web startup
+on:
+  push:
+    branches: [deploy/recovery-web-check-20261030]
+    paths: [.github/workflows/recovery-startup.yml, deployment/startup.cjs]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  startup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        app: [gridcraft, cadcraft, pdfcraft, vectorcraft, photocraft, solidcraft, filmcraft]
+    env:
+      GH_TOKEN: ${{ github.token }}
+      APP: ${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Wait for this compiled artifact
+        run: |
+          run_id=41010329398
+          if [ "$APP" = photocraft ]; then run_id=41010784330; fi
+          artifact_id=
+          for attempt in $(seq 1 150); do
+            artifact_id=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts?per_page=100" --jq ".artifacts[] | select(.name == \"$APP-latest-chinese-20261030\" and .expired == false) | .id")
+            if [ -n "$artifact_id" ]; then break; fi
+            sleep 20
+          done
+          test -n "$artifact_id"
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$artifact_id/zip" > artifact.zip
+          unzip -q artifact.zip -d artifact
+          inner=$(find artifact -name "$APP-web-*-zh.zip" -print -quit)
+          test -n "$inner"
+          mkdir site
+          unzip -q "$inner" -d site
+      - name: Prepare browser
+        run: |
+          npm install --no-audit --no-fund playwright-core@1.56.1
+          command -v google-chrome
+      - name: Open the Chinese Web startup page
+        run: |
+          python3 -m http.server 8765 --directory site >/tmp/site-server.log 2>&1 &
+          node deployment/startup.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ matrix.app }}-startup-20261030
+          path: |
+            startup.png
+            startup.json
+          retention-days: 14
