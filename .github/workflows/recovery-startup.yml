@@ -25,11 +25,10 @@ jobs:
           persist-credentials: false
       - name: Wait for this compiled artifact
         run: |
-          run_id=41010329398
-          if [ "$APP" = photocraft ]; then run_id=41010784330; fi
+          run_id=41016845138
           artifact_id=
           for attempt in $(seq 1 150); do
-            artifact_id=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts?per_page=100" --jq ".artifacts[] | select(.name == \"$APP-latest-chinese-20261030\" and .expired == false) | .id")
+            artifact_id=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$run_id/artifacts?per_page=100" --jq ".artifacts[] | select(.name == \"vectorcraft-font-readiness-20261030\" and .expired == false) | .id")
             if [ -n "$artifact_id" ]; then break; fi
             sleep 20
           done
@@ -51,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ${{ matrix.app }}-deep-startup-20261030
+          name: vectorcraft-fixed-startup-20261030
           path: |
             startup-*.png
             startup.json
