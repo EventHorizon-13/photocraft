@@ -1,7 +1,7 @@
 name: Craft targeted Web startup
 on:
   push:
-    branches: [deploy/recovery-web-check-20261030]
+    branches: [deploy/recovery-vector-check-20261030]
     paths: [.github/workflows/recovery-startup.yml, deployment/startup.cjs]
   workflow_dispatch:
 permissions:
@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       max-parallel: 2
       matrix:
-        app: [gridcraft, cadcraft, pdfcraft, vectorcraft, photocraft, solidcraft, filmcraft]
+        app: [vectorcraft]
     env:
       GH_TOKEN: ${{ github.token }}
       APP: ${{ matrix.app }}
@@ -42,7 +42,7 @@ jobs:
           unzip -q "$inner" -d site
       - name: Prepare browser
         run: |
-          npm install --no-audit --no-fund playwright-core@1.56.1
+          npm install --no-audit --no-fund playwright-core@1.56.1 pngjs@7.0.0
           command -v google-chrome
       - name: Open the Chinese Web startup page
         run: |
@@ -51,8 +51,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ${{ matrix.app }}-startup-20261030
+          name: ${{ matrix.app }}-deep-startup-20261030
           path: |
-            startup.png
+            startup-*.png
             startup.json
           retention-days: 14
